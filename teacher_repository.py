@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
@@ -42,4 +44,13 @@ class TeacherRepository:
 
         result = await self.db.execute(query)
         return result.unique().scalars().first()
+
+    async def get_all_teachers(self,offset:int =0,limit:int = 20) -> List[Teacher]:
+
+        query = select(Teacher).offset(offset).limit(limit)
+
+        result = await self.db.execute(query)
+
+        return list(result.unique().scalars().all())
+
 
