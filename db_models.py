@@ -48,7 +48,7 @@ class Courses (Base):
 
     id: Mapped[int]= mapped_column(primary_key=True,index=True)
     teacher_id: Mapped[int] =mapped_column(
-        ForeignKey("teacher.id", ondelete="CASCADE")
+        ForeignKey("teachers.id", ondelete="CASCADE")
     )
     name:Mapped[str] = mapped_column(String(300), nullable=False)
     code:Mapped[str] = mapped_column(String(50), nullable=False)

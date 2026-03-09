@@ -1,4 +1,6 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload, selectinload
 
 from db_models import Teacher, TeacherProfile
 from resoponse_models import TeacherCreate
@@ -26,3 +28,18 @@ class TeacherRepository:
         await self.db.commit()
         await self.db.refresh(teacher)
         return teacher
+
+    async def get_by_id(self, teacher_id:int) -> Teacher | None:
+
+        query = (
+            select(Teacher)
+            .where(Teacher.id == teacher_id)
+            .options(
+                joinedload(Teacher.profile),
+                selectinload(Teacher.courses)
+            )
+        )
+
+        result = await self.db.execute(query)
+        return result.unique().scalars().first()
+

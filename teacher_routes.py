@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
+from starlette.exceptions import HTTPException
 
 from database_config import get_db
 from resoponse_models import TeacherCreate, TeacherResponse
@@ -16,3 +17,16 @@ async def  create_teacher(data:TeacherCreate, db: AsyncSession= Depends(get_db))
     teacher = await repo.create(data)
 
     return teacher
+
+@router.get("/",response_model= TeacherResponse,status_code=status.HTTP_200_OK)
+async def get_user_by_id(teacher_id:int,db: AsyncSession= Depends(get_db)):
+    repo = TeacherRepository(db)
+    teacher = await repo.get_by_id(teacher_id)
+
+    if not teacher:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Teacher not found")
+
+    return teacher
+
+
+
