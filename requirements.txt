@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+sqlalchemy
+asyncpg
+pydantic
+python-dotenv
+langchain
+langchain-openai
+langchain-community
+langgraph
+psycopg2
+greenlet
